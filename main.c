@@ -21,11 +21,12 @@ struct elf_loop_t{
         //queue(type) queue
 };
 struct elf_status_t{
-        //use enums for statuses?
+        //use enums for statuses? For now am using int
+        int status;
 };
 
 struct elf_handler_t{
-        //finish me lol
+        //not sure what instructions want here
 };
 struct elf_event_loop{
         pthread_mutex_t lock;
