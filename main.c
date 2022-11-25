@@ -2,10 +2,11 @@
 #include <pthread.h>
 #include <unistd.h>
 
-//not sure how many events to expect or whether we should add a resize to the queue
+//not sure how many events to expect or if we should just add a resize to the queue
 #define magic_total_events 100
 
 struct queue{
+        pthread_mutex_t queue_lock;
         int beg, end;
         int count_queues;
         //array of whatever we are holding in the queues, I presume elf_event_t?
@@ -40,11 +41,14 @@ void *pthread_action(void *args)
     sleep(1);
 }
 
-int main()
-{
-    pthread_t p;
-    pthread_create(&p, NULL, pthread_action, NULL);
-    printf("Hello from main thread\n");
-    pthread_join(p, NULL);
-    printf("Hello after pthread join\n");
+void init_queue(struct queue* tmp){
+        tmp->beg = -1;
+        tmp->end = 0;
+        tmp->count_queues = 0;
 }
+
+void queue_event(struct elf_event_t* event, struct queue* q){
+        pthread_mutex_lock(&q->queue_lock);
+        q->events[q->end] = event;
+        q->end++;
+                                                                                      1,18          Top
