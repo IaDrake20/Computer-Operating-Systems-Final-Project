@@ -1,7 +1,8 @@
 #ifndef __ELF_H__
 #define __EFL_H__
 
-#include "queue.h"
+// #include "queue.h"
+#include "gqueue.h"
 #include "event.h"
 #include <pthread.h>
 
