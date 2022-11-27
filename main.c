@@ -88,6 +88,10 @@ void test_queue()
 	empty = queue_empty(&q);
 	printf("is the queue empty?: %s\n", empty ? "yes" : "no");
 
+	Point *p3;
+	p3 = (Point *)queue_dequeue(&q);
+	printf("point removed from queue again with values: (x=%d, y=%d)\n", p3->x, p3->y);
+
 	// test putting an event in the queue
 	elf_event_t *e = (elf_event_t *)malloc(sizeof(elf_event_t));
 	int e_data = 7;
