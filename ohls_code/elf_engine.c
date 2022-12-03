@@ -30,6 +30,7 @@ void * elf_loop_routine(void * id) {
     while (1) {
         // dequeue message or block
         // TODO
+        // elf_queue_dequeue(loop->queue, &event);
 
         // invoke registered event handler callback
         status = loop->handler(loop->id, event);
@@ -66,6 +67,24 @@ elf_status_t elf_main(elf_handler_t handler) {
 
 // creates new event loop if possible
 elf_status_t elf_init(uint32_t *ref_loop_id, elf_handler_t handler) {
+    assert(elf_num_loops < ELF_CAP_LOOPS -1);
+    assert(ref_loop_id != NULL);
+    assert(handler != NULL);
+
+    elf_status_t status = elf_loop_new(elf_loops + *ref_loop_id, *ref_loop_id, handler);
+    if (status != ELF_OK)
+        return status;
+
+    // update global number of loops; no mutex needed because
+    //   we assume single main thread until main loop starts
+    // TODO: ??? idk if this applies here as well, these comments ^^^ were from Ohl's elf_main code
+    elf_loops_valid[elf_num_loops] = true;
+    elf_num_loops += 1;
+
+    status = elf_loop_start(elf_loops[*ref_loop_id]);
+    if (status != ELF_OK)
+        return status;
+
     return ELF_OK;
 }
 

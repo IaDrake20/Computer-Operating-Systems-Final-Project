@@ -44,8 +44,8 @@ elf_status_t handler_main(uint32_t self_id, elf_event_t event) {
     // assume, we are triggered at least once
     printf("handler_main(): triggered\n");
     
-    uint32_t ping_id = UINT32_MAX;
-    uint32_t pong_id = UINT32_MAX;
+    uint32_t ping_id = 1;  // was UINT32_MAX
+    uint32_t pong_id = 2;  // was UINT32_MAX
 
     elf_init(&ping_id, handler_ping);
     elf_init(&pong_id, handler_pong);
