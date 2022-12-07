@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 // global state
 size_t elf_num_loops;
@@ -30,7 +31,7 @@ void * elf_loop_routine(void * id) {
     while (1) {
         // dequeue message or block
         // TODO
-        // elf_queue_dequeue(loop->queue, &event);
+        elf_queue_dequeue(loop->queue, &event);
 
         // invoke registered event handler callback
         status = loop->handler(loop->id, event);
@@ -55,6 +56,11 @@ elf_status_t elf_main(elf_handler_t handler) {
     //   we assume single main thread until main loop starts
     elf_loops_valid[0] = true;
     elf_num_loops += 1;
+
+    // TOOO: is this correct?
+    // send dummy event to main loop to kick it off (needs 1 iteration to activate handler for first time)
+    elf_event_t e = elf_event_token();
+    elf_send(0, e);
 
     status = elf_loop_start(elf_loops[0]);
     if (status != ELF_OK)
@@ -97,6 +103,11 @@ elf_status_t elf_fini(uint32_t loop_id) {
 
 // sends an event to an event loop if possible
 elf_status_t elf_send(uint32_t loop_id, elf_event_t event) {
+    // printf("elf sending to %d\n", loop_id);
+    printf(" "); // TODO: figure out why malloc fails error if no print here lol
+    elf_queue_enqueue(elf_loops[loop_id]->queue, event);
+
+    // printf("elf sent\n");
     return ELF_OK;
 }
 

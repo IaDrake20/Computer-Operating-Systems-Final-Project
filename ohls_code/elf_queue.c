@@ -60,6 +60,7 @@ elf_status_t elf_queue_enqueue(elf_queue_t queue, elf_event_t event) {
 
     // if queue full, return ELF_FULL
     if (queue->size == queue->cap) {
+        pthread_mutex_unlock(&(queue->lock));
         return ELF_FULL;
     }
 
@@ -89,7 +90,7 @@ elf_status_t elf_queue_dequeue(elf_queue_t queue, elf_event_t * ref_event) {
 
     pthread_mutex_lock(&(queue->lock));
 
-    // if queue empty, block (wait for enqueue to signal)
+    // if queue empty, block (wait for enqueue to signal) (also unlocks the mutex)
     if (queue->size == 0) {
         pthread_cond_wait(&(queue->empty_cond), &queue->lock);
     }
