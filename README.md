@@ -3,7 +3,7 @@
 Instructions are listed with the files.
 
 TODO:
-  Build public header \n
+  Build public header
   Run queue test successfully
   test event communication between threads
   Write example_code file to demonstrate a mix of IO and CPU bound
