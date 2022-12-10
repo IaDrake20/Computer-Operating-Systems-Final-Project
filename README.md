@@ -10,6 +10,6 @@ TODO:
 operations distributed over multiple event loops. The IO may be via stdin,
 stdout, or files. The code should demonstrate how to communicate bidi-
 rectionally between event loops (requests and acknowledgments) and how to
-shut down event loops in a clean way.
+shut down event loops in a clean way. PErhaps the collatz conjecture?
 
 Reorganize code to proper classes to follow Professor Ohl's example of an internal, public, engine, etc.
