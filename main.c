@@ -21,7 +21,7 @@ int main()
 
 	// add an int to queue
 	int elem = 4;
-	queue_enqueue(&q, &elem);//(IAN): not getting past this point
+	queue_enqueue(&q, &elem);//(IAN): not getting past this point as thread refuses to unlock
 	printf("int added to queue (4).\n");
 
 	// remove the int from the queue
