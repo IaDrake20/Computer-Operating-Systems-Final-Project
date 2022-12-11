@@ -1,17 +1,10 @@
 build:
-	@gcc -o event.o -c event.c
-	@gcc -o gqueue.o -c gqueue.c
-	@gcc -o elf.o -c elf.c
-	@gcc -o main main.c event.o gqueue.o elf.o -pthread -std=c11 -pedantic -lpthread -lrt
+	@gcc -std=c11 -pedantic elf_engine.c elf_queue.c elf_example.c -o example -lpthread
 
 run:
-	@./main
+	@./example
 
 clean:
-	@rm -f main
-	@rm -f event.o
-	@rm -f gqueue.o
-	@rm -f elf.o
+	@rm -f example
 
-# run 'make dev' to run the program
 dev: build run clean
