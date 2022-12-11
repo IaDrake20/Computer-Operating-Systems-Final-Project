@@ -12,6 +12,7 @@ void queue_init(queue_t *q)
 
 // add an element to the back of the queue
 // returns 0 when queue is full, 1 on successful add
+// TODO: lock isn't being opened by the thread
 int queue_enqueue(queue_t *q, void *elem)
 {
     if (queue_full(q))
@@ -19,6 +20,7 @@ int queue_enqueue(queue_t *q, void *elem)
         return 0;
     }
 
+    printf("Locking mutex");
     pthread_mutex_lock(&q->queue_lock);
 
     q->elems[q->end] = elem;
