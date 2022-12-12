@@ -14,6 +14,7 @@ enum elf_status_e {
     ELF_ERROR,
     ELF_EMPTY,
     ELF_FULL,
+    ELF_DONE,
 };
 typedef enum elf_status_e elf_status_t;
 

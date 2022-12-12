@@ -93,6 +93,7 @@ elf_status_t elf_init(uint32_t *ref_loop_id, elf_handler_t handler) {
 
 // ends event loop if possible
 elf_status_t elf_fini(uint32_t loop_id) {
+    free(elf_loops[loop_id]);
     return ELF_OK;
 }
 
