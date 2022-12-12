@@ -30,7 +30,6 @@ void * elf_loop_routine(void * id) {
 
     while (1) {
         // dequeue message or block
-        // TODO
         elf_queue_dequeue(loop->queue, &event);
 
         // invoke registered event handler callback
@@ -81,9 +80,6 @@ elf_status_t elf_init(uint32_t *ref_loop_id, elf_handler_t handler) {
     if (status != ELF_OK)
         return status;
 
-    // update global number of loops; no mutex needed because
-    //   we assume single main thread until main loop starts
-    // TODO: ??? idk if this applies here as well, these comments ^^^ were from Ohl's elf_main code
     elf_loops_valid[elf_num_loops] = true;
     elf_num_loops += 1;
 
@@ -103,23 +99,9 @@ elf_status_t elf_fini(uint32_t loop_id) {
 
 // sends an event to an event loop if possible
 elf_status_t elf_send(uint32_t loop_id, elf_event_t event) {
-    // printf("elf sending to %d\n", loop_id);
-    printf(" "); // TODO: figure out why malloc fails error if no print here lol
     elf_queue_enqueue(elf_loops[loop_id]->queue, event);
-
-    // printf("elf sent\n");
     return ELF_OK;
 }
-
-
-//elf_status_t elf_event_new(elf_event_t *ref_event) {
-//    assert(ref_event != NULL);
-//    assert(*ref_event == NULL);
-//
-//    *ref_event = calloc(1, sizeof(struct elf_event_s));
-//    // TODO
-//    return (*ref_event == NULL) ? ELF_ERROR : ELF_OK;
-//}
 
 
 elf_status_t elf_loop_new(elf_loop_t *ref_loop, uint32_t id, elf_handler_t handler) {

@@ -25,7 +25,7 @@ struct elf_queue_s {
  */
 elf_status_t elf_queue_new(elf_queue_t *ref_queue) {
 
-    *ref_queue = calloc(1, sizeof(elf_queue_t));
+    *ref_queue = calloc(1, sizeof(struct elf_queue_s));
 
     pthread_mutex_init(&((*ref_queue)->lock), NULL);
     pthread_cond_init(&((*ref_queue)->empty_cond), NULL);
