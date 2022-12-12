@@ -105,6 +105,12 @@ elf_status_t handler_Collatz_P1(uint32_t self_id, elf_event_t event){
 	// if number == 1, problem is solved, exit.
 	if(number == 1) {
 		printf("Finished calculating\n");
+		// end both event loops
+		elf_fini(state_collatz_p1.other_loop);
+		elf_fini(self_id);
+
+		// send message to main loop letting it know its finished.
+		elf_send(0, elf_event_token());
 		return ELF_OK;
 	}
 
@@ -150,7 +156,17 @@ elf_status_t handler_Collatz_P2(uint32_t self_id, elf_event_t event){
 	return ELF_OK;
 }	
 
+struct {
+	uint32_t iteration;
+} state_collatz_main = { .iteration = 0 };
+
 elf_status_t handler_collatz(uint32_t self_id, elf_event_t event) {
+
+	// exit on second time this handler is called 
+	// first event called by elf_main, second called by collatz_p1 when calculation finished
+	if (state_collatz_main.iteration != 0) {
+		return ELF_DONE;
+	}
 	uint32_t collatz_p1_id = 1;
 	uint32_t collatz_p2_id = 2;
 
@@ -169,12 +185,15 @@ elf_status_t handler_collatz(uint32_t self_id, elf_event_t event) {
 	// send desired input to collatz_p1 to begin calculation
 	elf_send(collatz_p1_id, elf_event_int32(input));
 
+	state_collatz_main.iteration += 1;
+
 	return ELF_OK;
 }
 
-
 int main() {
-	elf_main(handler_pingpong);
-	// elf_main(handler_collatz);
+	// elf_main(handler_pingpong);
+
+	// 15 is a good testing number for this (enter when prompted for input)
+	elf_main(handler_collatz);
 	return 0;
 }
