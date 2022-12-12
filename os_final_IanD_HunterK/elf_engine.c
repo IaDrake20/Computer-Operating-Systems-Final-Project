@@ -56,7 +56,6 @@ elf_status_t elf_main(elf_handler_t handler) {
     elf_loops_valid[0] = true;
     elf_num_loops += 1;
 
-    // TOOO: is this correct?
     // send dummy event to main loop to kick it off (needs 1 iteration to activate handler for first time)
     elf_event_t e = elf_event_token();
     elf_send(0, e);
