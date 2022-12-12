@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <assert.h>
+#include <stdbool.h>
+
+bool debug = false;
 
 struct {
 	uint32_t other_loop;
@@ -99,7 +102,7 @@ elf_status_t handler_Collatz_P1(uint32_t self_id, elf_event_t event){
 	// if here, both loops should be initialized, so handle event with int
 	int number = event.value.int32;
 	assert(number != 0); //check null
-	printf("collatz1 received event with num: %d\n", number);
+	debug && printf("collatz1 received event with num: %d\n", number);
 	printf("%d\n", number);
 
 	// if number == 1, problem is solved, exit.
@@ -116,14 +119,14 @@ elf_status_t handler_Collatz_P1(uint32_t self_id, elf_event_t event){
 
 	// check if number is even, if so, divide by 2 and sent new event with new value to self
 	if (number % 2 == 0) {
-		printf("number is even, collatz1 is dividing by 2, and sending event to self\n");
+		debug && printf("number is even, collatz1 is dividing by 2, and sending event to self\n");
 		sleep(1);
 		int newNum = number / 2;
 		elf_send(self_id, elf_event_int32(newNum));
 	}
 	// if number is not even, send event containing the number to other loop
 	else {
-		printf("number is odd, collatz1 sending event to collatz2\n");
+		debug && printf("number is odd, collatz1 sending event to collatz2\n");
 		sleep(1);
 		elf_send(state_collatz_p1.other_loop, elf_event_int32(number));
 	}
@@ -144,13 +147,13 @@ elf_status_t handler_Collatz_P2(uint32_t self_id, elf_event_t event){
 	// if event comes here with number, we always multiply by 3, then add 1, then send new num back to collatz1
 	int number = event.value.int32;
 	assert(number != 0); // check null
-	printf("collatz2 received event with num: %d\n", number);
-	printf("colltz2 multiplying num by 3 and adding 1...\n");
+	debug && printf("collatz2 received event with num: %d\n", number);
+	debug && printf("colltz2 multiplying num by 3 and adding 1...\n");
 	// sleep(1);
 
 	int newNum = number * 3 + 1;
 
-	printf("collatz2 sending event to collatz1\n");
+	debug && printf("collatz2 sending event to collatz1\n");
 	elf_send(state_collatz_p2.other_loop, elf_event_int32(newNum));
 
 	return ELF_OK;
@@ -190,6 +193,7 @@ elf_status_t handler_collatz(uint32_t self_id, elf_event_t event) {
 	return ELF_OK;
 }
 
+// !!! switch debug to true at the top of the file to see detailed outputs.
 int main() {
 	// elf_main(handler_pingpong);
 
