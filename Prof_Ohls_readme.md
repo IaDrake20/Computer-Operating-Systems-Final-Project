@@ -10,9 +10,9 @@
 
 ## Initial Steps
 
-- implement the multi-threaded unbounded `elf_queue_t` first
-  - `elf_dequeue()` operation blocks if queue is empty 
-  - `elf_enqeue()` operation returns `ELF_FULL` if queue is full
+- implement the multi-threaded unbounded `elf_queue_t` first...FINISHED
+  - `elf_dequeue()` operation blocks if queue is empty <--Done
+  - `elf_enqeue()` operation returns `ELF_FULL` if queue is full <--Done
   - you need to use POSIX thread functions here
 
 - modify `elf_loop_routine()` to dequeue properly
